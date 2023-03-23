@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
@@ -14,7 +15,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::all();
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -24,7 +26,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -35,7 +37,34 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = validator($request->all(), [
+            'content' => 'required|string|min:3'
+        ]);
+        if (!$validator->fails()) {
+            $post = new Post();
+            $post->content = $request->get('content');
+            $post->likes_no = 0;
+            $post->coments_no = 0;
+            $post->user_id = 2;
+
+            $saved = $post->save();
+            if ($saved) {
+                return response()->json(
+                    [
+                        'message' => $saved ? 'Post Created Successfully' : 'Post Created failed'
+                    ],
+                    $saved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+
+                );
+            }
+        } else {
+            return response()->json(
+                [
+                    'message' => $validator->getMessageBag()->first()
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 
     /**
@@ -57,7 +86,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
+
     }
 
     /**
@@ -69,7 +99,34 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $validator = validator($request->all(), [
+            'content' => 'required|string|min:3'
+        ]);
+        if (!$validator->fails()) {
+
+            $post->content = $request->get('content');
+            $post->likes_no = 0;
+            $post->coments_no = 0;
+            $post->user_id = 2;
+
+            $saved = $post->save();
+            if ($saved) {
+                return response()->json(
+                    [
+                        'message' => $saved ? 'Post Updated Successfully' : 'Post Updated failed'
+                    ],
+                    $saved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+
+                );
+            }
+        } else {
+            return response()->json(
+                [
+                    'message' => $validator->getMessageBag()->first()
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 
     /**
@@ -80,6 +137,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $deleted = $post->delete();
+
+        return response()->json(
+            [
+                'message' => $deleted ? 'Post Deleted Successfully' : 'Post Deleted failed'
+            ],
+            $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+        );
     }
 }
