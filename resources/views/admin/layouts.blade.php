@@ -239,7 +239,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </p>
                                     </a>
                                 </li>
-                                {{-- users  --}}
+                                {{-- posts  --}}
+
+                                {{-- likes  --}}
+                                <li class="nav-item">
+                                    <a href="{{ route('likes.index') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-th"></i>
+                                        <p>
+                                            Likes
+                                        </p>
+                                    </a>
+                                </li>
+                                {{-- likes  --}}
+
+                                {{-- comments  --}}
+                                <li class="nav-item">
+                                    <a href="{{ route('comments.index') }}" class="nav-link">
+                                        <i class="nav-icon fas fa-th"></i>
+                                        <p>
+                                            Comments
+                                        </p>
+                                    </a>
+                                </li>
+                                {{-- comments  --}}
 
                             </ul>
                         </li>

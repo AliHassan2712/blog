@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Like;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class LikeController extends Controller
 {
@@ -14,7 +15,8 @@ class LikeController extends Controller
      */
     public function index()
     {
-        //
+        $likes = Like::all();
+        return view('admin.likes.index', compact('likes'));
     }
 
     /**
@@ -24,7 +26,7 @@ class LikeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.likes.create');
     }
 
     /**
@@ -35,7 +37,33 @@ class LikeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = validator($request->all(), [
+            'post_id' => 'required|integer',
+            'user_id' => 'required|integer'
+        ]);
+        if (!$validator->fails()) {
+            $like = new Like();
+            $like->post_id = $request->get('post_id');
+            $like->user_id = $request->get('user_id');
+
+            $saved = $like->save();
+            if ($saved) {
+                return response()->json(
+                    [
+                        'message' => $saved ? 'Like Created Successfully' : 'Like Created failed'
+                    ],
+                    $saved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+
+                );
+            }
+        } else {
+            return response()->json(
+                [
+                    'message' => $validator->getMessageBag()->first()
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 
     /**
@@ -57,7 +85,7 @@ class LikeController extends Controller
      */
     public function edit(Like $like)
     {
-        //
+        return view('admin.likes.edit', compact('like'));
     }
 
     /**
@@ -69,7 +97,32 @@ class LikeController extends Controller
      */
     public function update(Request $request, Like $like)
     {
-        //
+        $validator = validator($request->all(), [
+            'post_id' => 'required|integer',
+            'user_id' => 'required|integer'
+        ]);
+        if (!$validator->fails()) {
+            $like->post_id = $request->get('post_id');
+            $like->post_id = $request->get('user_id');
+
+            $saved = $like->save();
+            if ($saved) {
+                return response()->json(
+                    [
+                        'message' => $saved ? 'Like Created Successfully' : 'Like Created failed'
+                    ],
+                    $saved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+
+                );
+            }
+        } else {
+            return response()->json(
+                [
+                    'message' => $validator->getMessageBag()->first()
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 
     /**
@@ -80,6 +133,13 @@ class LikeController extends Controller
      */
     public function destroy(Like $like)
     {
-        //
+        $deleted = $like->delete();
+
+        return response()->json(
+            [
+                'message' => $deleted ? 'Like Deleted Successfully' : 'Like Deleted failed'
+            ],
+            $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+        );
     }
 }

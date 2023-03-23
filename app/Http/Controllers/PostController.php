@@ -45,7 +45,7 @@ class PostController extends Controller
             $post->content = $request->get('content');
             $post->likes_no = 0;
             $post->coments_no = 0;
-            $post->user_id = 2;
+            $post->user_id = 1;
 
             $saved = $post->save();
             if ($saved) {
@@ -107,7 +107,7 @@ class PostController extends Controller
             $post->content = $request->get('content');
             $post->likes_no = 0;
             $post->coments_no = 0;
-            $post->user_id = 2;
+            $post->user_id = 1;
 
             $saved = $post->save();
             if ($saved) {

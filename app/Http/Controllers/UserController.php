@@ -155,7 +155,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = USer::find($id);
+        $user = User::find($id);
         Storage::disk('public')->delete("users/$user->cover");
         $deleted = $user->delete();
 
