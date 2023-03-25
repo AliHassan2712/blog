@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('likes_no');
             $table->integer('coments_no');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->on('users')->references('id')->cascadeOnDelete();
+            $table->foreign('user_id')->on('users')->references('id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
